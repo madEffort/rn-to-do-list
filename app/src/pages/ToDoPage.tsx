@@ -15,6 +15,7 @@ import { getDayColor, getDayOfWeek } from '../utils/customUtils';
 import useCalender from '../hooks/useCalender';
 import ArrowButton from '../domains/components/ArrowButton';
 import Column from '../domains/components/Column';
+import { useToDoList } from '../hooks';
 
 const ToDoPage = () => {
   const now = dayjs();
@@ -29,6 +30,9 @@ const ToDoPage = () => {
     add1Month,
     subtract1Month,
   } = useCalender(now);
+
+  const { todoList } = useToDoList(selectedDate);
+
   const columns = getCalendarColumns(selectedDate);
 
   useEffect(() => {
