@@ -9,83 +9,31 @@ import {
 } from 'react-native';
 import { getCalendarColumns } from '../utils/calendar';
 import dayjs, { Dayjs } from 'dayjs';
-import styled from 'styled-components';
-import Margin from '../components/common/Margin';
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
-type ColumnProps = {
-  color: string;
-  opacity: number;
-  text: string | number;
-  disabled: boolean;
-  onPress: () => void;
-  isSelected: boolean;
-};
-
-const Column = ({
-  color,
-  opacity,
-  text,
-  disabled,
-  onPress,
-  isSelected,
-}: ColumnProps) => {
-  const columnSize = 40;
-
-  return (
-    <TouchableOpacity
-      style={{
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: columnSize,
-        height: columnSize,
-        backgroundColor: isSelected ? 'grey' : 'transparent',
-        borderRadius: columnSize,
-      }}
-      disabled={disabled}
-      onPress={onPress}>
-      <Text
-        style={{
-          color: isSelected ? 'white' : color,
-          opacity: opacity,
-        }}>
-        {text}
-      </Text>
-    </TouchableOpacity>
-  );
-};
-
-type ArrowProps = {
-  iconName: string;
-  size: number;
-  color: string;
-  onPress: () => void;
-};
-
-const ArrowButton = ({ iconName, size, color, onPress }: ArrowProps) => {
-  return (
-    <TouchableOpacity
-      style={{ paddingVertical: 16, paddingHorizontal: 22 }}
-      onPress={onPress}>
-      <SimpleLineIcons name={iconName} size={16} color="#000" />
-    </TouchableOpacity>
-  );
-};
+import { getDayColor, getDayOfWeek } from '../utils/customUtils';
+import useCalender from '../hooks/useCalender';
+import ArrowButton from '../domains/components/ArrowButton';
+import Column from '../domains/components/Column';
 
 const ToDoPage = () => {
   const now = dayjs();
-  const [selectedDate, setSelectedDate] = useState(now);
+
+  const {
+    selectedDate,
+    setSelectedDate,
+    isDatePickerVisible,
+    showDatePicker,
+    hideDatePicker,
+    handleConfirm,
+    add1Month,
+    subtract1Month,
+  } = useCalender(now);
   const columns = getCalendarColumns(selectedDate);
 
   useEffect(() => {
     console.log(selectedDate.format());
   }, [selectedDate]);
-
-  const getDayOfWeek = (dayNumber: number): string => {
-    const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
-    return daysOfWeek[dayNumber];
-  };
 
   const ListHeaderComponent = () => {
     const currentDateText = dayjs(selectedDate).format('YYYY-MM-DD');
@@ -98,21 +46,11 @@ const ToDoPage = () => {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <ArrowButton
-            iconName="arrow-left"
-            size={16}
-            color="#000"
-            onPress={() => {}}
-          />
-          <TouchableOpacity>
+          <ArrowButton iconName="arrow-left" onPress={subtract1Month} />
+          <TouchableOpacity onPress={showDatePicker}>
             <Text style={{ fontSize: 20 }}>{currentDateText}</Text>
           </TouchableOpacity>
-          <ArrowButton
-            iconName="arrow-right"
-            size={16}
-            color="#000"
-            onPress={() => {}}
-          />
+          <ArrowButton iconName="arrow-right" onPress={add1Month} />
         </View>
         <View style={{ flexDirection: 'row' }}>
           {[0, 1, 2, 3, 4, 5, 6].map((item) => {
@@ -126,8 +64,8 @@ const ToDoPage = () => {
                 opacity={1}
                 text={dayText}
                 disabled={true}
-                onPress={() => {}}
-                isSelected={false}></Column>
+                isSelected={false}
+              />
             );
           })}
         </View>
@@ -172,13 +110,16 @@ const ToDoPage = () => {
         data={columns}
         numColumns={7}
         ListHeaderComponent={ListHeaderComponent}
-        renderItem={renderItem}></FlatList>
+        renderItem={renderItem}
+      />
+      <DateTimePickerModal
+        isVisible={isDatePickerVisible}
+        mode="date"
+        onConfirm={handleConfirm}
+        onCancel={hideDatePicker}
+      />
     </SafeAreaView>
   );
-};
-
-export const getDayColor = (day: number) => {
-  return day === 0 ? 'red' : day === 6 ? 'blue' : 'black';
 };
 
 export default ToDoPage;
