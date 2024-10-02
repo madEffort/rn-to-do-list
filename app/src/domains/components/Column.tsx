@@ -9,6 +9,7 @@ type ColumnProps = {
   disabled: boolean;
   onPress?: () => void;
   isSelected: boolean;
+  hasTodo?: boolean;
 };
 
 const ColumnContainer = styled.TouchableOpacity<{
@@ -28,9 +29,11 @@ const ColumnText = styled.Text<{
   isSelected: boolean;
   opacity: number;
   color: string;
+  hasTodo: boolean;
 }>`
   color: ${(props) => (props.isSelected ? 'white' : props.color)};
   opacity: ${(props) => props.opacity};
+  font-weight: ${(props) => (props.hasTodo ? '700' : 'normal')};
 `;
 
 const Column = ({
@@ -40,12 +43,19 @@ const Column = ({
   disabled,
   onPress,
   isSelected,
+  hasTodo,
 }: ColumnProps) => {
   const columnSize = 40;
 
   return (
-    <ColumnContainer {...{ disabled, onPress, isSelected, columnSize }}>
-      <ColumnText {...{ isSelected, color, opacity }}>{text}</ColumnText>
+    <ColumnContainer
+      disabled={disabled}
+      onPress={onPress}
+      isSelected={isSelected}
+      columnSize={columnSize}>
+      <ColumnText {...{ isSelected, color, opacity, hasTodo: !!hasTodo }}>
+        {text}
+      </ColumnText>
     </ColumnContainer>
   );
 };

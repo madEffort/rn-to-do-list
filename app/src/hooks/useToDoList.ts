@@ -1,29 +1,11 @@
 import dayjs, { Dayjs } from 'dayjs';
 import { useState } from 'react';
+import { defaultTodoList } from '../constants/todos';
 
-const defaultTodoList = [
-  {
-    id: 1,
-    content: '운동하기',
-    date: dayjs(),
-    isSuccess: true,
-  },
-  {
-    id: 2,
-    content: '공부하기',
-    date: dayjs(),
-    isSuccess: false,
-  },
-  {
-    id: 3,
-    content: '개발하기',
-    date: dayjs(),
-    isSuccess: true,
-  },
-];
+const dataTodoList = defaultTodoList;
 
-const useToDoList = (selectedDate: Dayjs) => {
-  const [todoList, setTodoList] = useState(defaultTodoList);
+const useTodoList = (selectedDate: Dayjs) => {
+  const [todoList, setTodoList] = useState(dataTodoList);
   const [todoInput, setTodoInput] = useState('');
 
   const addTodo = () => {
@@ -50,19 +32,35 @@ const useToDoList = (selectedDate: Dayjs) => {
 
   const toggleTodo = (todoId: number) => {
     const newTodoList = todoList.map((todo) => {
-      if (todo.id !== todoId) return todo;
-      return {
-        ...todo,
-        isSuccess: !todo.isSuccess,
-      };
+      return todo.id !== todoId
+        ? todo
+        : { ...todo, isSuccess: !todo.isSuccess };
     });
     setTodoList(newTodoList);
   };
 
+  const resetInput = () => {
+    setTodoInput('');
+  };
+
+  const filteredTodoList = todoList.filter((todo) => {
+    const isSame = dayjs(todo.date.format()).isSame(
+      dayjs(selectedDate.format()),
+      'date',
+    );
+    return isSame;
+  });
+
   return {
-    todoList,
+    todoInput,
     setTodoInput,
+    addTodo,
+    removeTodo,
+    toggleTodo,
+    resetInput,
+    filteredTodoList,
+    todoList,
   };
 };
 
-export default useToDoList;
+export default useTodoList;
