@@ -1,6 +1,5 @@
 import React from 'react';
 import TodoPage from './pages/TodoPage';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Image, Pressable, SafeAreaView, View } from 'react-native';
 
 function App(): React.JSX.Element {

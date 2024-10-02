@@ -10,10 +10,7 @@ import dayjs, { Dayjs } from 'dayjs';
 
 import { getDayColor, getDayOfWeek } from '../../utils/customUtils';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import { getCalendarColumns } from '../../utils/calendar';
 import { Column, ArrowButton } from './index';
-import { useCalender } from '../../hooks/index';
-import { Margin } from '../../components/common';
 
 type CalendarProps = {
   columns: Dayjs[];

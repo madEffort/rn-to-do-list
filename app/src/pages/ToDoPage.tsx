@@ -63,7 +63,7 @@ const TodoPage = () => {
   const scrollToEnd = () => {
     setTimeout(() => {
       flatListRef.current?.scrollToEnd({ animated: true });
-    }, 100);
+    }, 200);
   };
 
   const onPressAdd = () => {
