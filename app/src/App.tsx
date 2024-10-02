@@ -4,6 +4,7 @@ import { Image, Pressable, SafeAreaView, View } from 'react-native';
 
 function App(): React.JSX.Element {
   return (
+    // 이 프로젝트는 리팩토링이 필요함
     <View style={{ flex: 1 }}>
       {/* <Image
         source={{
