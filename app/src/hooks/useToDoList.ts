@@ -1,12 +1,21 @@
 import dayjs, { Dayjs } from 'dayjs';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { defaultTodoList } from '../constants/todos';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { TODO_LIST_KEY } from '../constants/item_constant';
+import { ToDoItemType } from '../pages/TodoPage';
 
 const dataTodoList = defaultTodoList;
 
 const useTodoList = (selectedDate: Dayjs) => {
   const [todoList, setTodoList] = useState(dataTodoList);
   const [todoInput, setTodoInput] = useState('');
+  const [loading, setLoading] = useState(true);
+
+  const saveTodoList = (newTodoList: Array<ToDoItemType>) => {
+    setTodoList(newTodoList);
+    AsyncStorage.setItem(TODO_LIST_KEY, JSON.stringify(newTodoList));
+  };
 
   const addTodo = () => {
     const len = todoList.length;
@@ -21,13 +30,12 @@ const useTodoList = (selectedDate: Dayjs) => {
         isSuccess: false,
       },
     ];
-
-    setTodoList(newTodoList);
+    saveTodoList(newTodoList);
   };
 
   const removeTodo = (todoId: number) => {
     const newTodoList = todoList.filter((todo) => todo.id !== todoId);
-    setTodoList(newTodoList);
+    saveTodoList(newTodoList);
   };
 
   const toggleTodo = (todoId: number) => {
@@ -36,7 +44,7 @@ const useTodoList = (selectedDate: Dayjs) => {
         ? todo
         : { ...todo, isSuccess: !todo.isSuccess };
     });
-    setTodoList(newTodoList);
+    saveTodoList(newTodoList);
   };
 
   const resetInput = () => {
@@ -44,12 +52,26 @@ const useTodoList = (selectedDate: Dayjs) => {
   };
 
   const filteredTodoList = todoList.filter((todo) => {
-    const isSame = dayjs(todo.date.format()).isSame(
-      dayjs(selectedDate.format()),
+    const isSame = dayjs(dayjs(todo.date).format()).isSame(
+      dayjs(dayjs(selectedDate).format()),
       'date',
     );
     return isSame;
   });
+
+  useEffect(() => {
+    init();
+  }, []);
+
+  const init = async () => {
+    setLoading(true);
+    const jsonValue = await AsyncStorage.getItem(TODO_LIST_KEY);
+    if (jsonValue) {
+      const newTodoList = JSON.parse(jsonValue);
+      setTodoList(newTodoList);
+    }
+    setLoading(false);
+  };
 
   return {
     todoInput,
@@ -60,6 +82,7 @@ const useTodoList = (selectedDate: Dayjs) => {
     resetInput,
     filteredTodoList,
     todoList,
+    loading,
   };
 };
 

@@ -1,18 +1,14 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import {
   Alert,
   FlatList,
-  Image,
-  Keyboard,
   KeyboardAvoidingView,
   ListRenderItem,
   Pressable,
   SafeAreaView,
-  ScrollView,
   Text,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
   View,
+  ActivityIndicator,
 } from 'react-native';
 import dayjs, { Dayjs } from 'dayjs';
 import { Platform } from 'react-native';
@@ -25,9 +21,8 @@ import { ITEM_WIDTH } from '../constants/item_constant';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 import { getCalendarColumns } from '../utils/calendar';
-// import { SafeAreaView } from 'react-native-safe-area-context';
 
-type ToDoItemType = {
+export type ToDoItemType = {
   id: number;
   content: string;
   date: Dayjs;
@@ -60,6 +55,7 @@ const TodoPage = () => {
     resetInput,
     filteredTodoList,
     todoList,
+    loading,
   } = useTodoList(selectedDate);
 
   const columns = getCalendarColumns(selectedDate);
@@ -73,13 +69,11 @@ const TodoPage = () => {
   const onPressAdd = () => {
     addTodo();
     resetInput();
-    // scrollToEnd();
   };
 
   const onSubmitEditing = () => {
     addTodo();
     resetInput();
-    // scrollToEnd();
   };
 
   const onFocus = () => {
@@ -155,6 +149,15 @@ const TodoPage = () => {
       </Pressable>
     );
   };
+
+  if (loading) {
+    return (
+      <SafeAreaView
+        style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={{ flex: 1 }}>

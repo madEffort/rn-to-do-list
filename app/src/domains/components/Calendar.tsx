@@ -95,8 +95,8 @@ const Calendar = ({
     );
 
     const hasTodo = todoList.filter((todo) => {
-      return dayjs(todo.date.format()).isSame(
-        dayjs(item.format()).format(),
+      return dayjs(dayjs(todo.date).format()).isSame(
+        dayjs(dayjs(item).format()).format(),
         'date',
       );
     });

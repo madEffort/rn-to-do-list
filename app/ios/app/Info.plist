@@ -67,5 +67,7 @@
 		<string>Zocial.ttf</string>
 		<string>Fontisto.ttf</string>
 	</array>
+	<key>NSDocumentsFolderUsageDescription</key>
+	<string>This app requires access to the Documents folder.</string>
 </dict>
 </plist>

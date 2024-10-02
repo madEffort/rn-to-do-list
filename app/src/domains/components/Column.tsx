@@ -1,5 +1,4 @@
 import React from 'react';
-import { TouchableOpacity, Text } from 'react-native';
 import styled from 'styled-components/native';
 
 type ColumnProps = {
@@ -45,7 +44,7 @@ const Column = ({
   isSelected,
   hasTodo,
 }: ColumnProps) => {
-  const columnSize = 40;
+  const columnSize = 50;
 
   return (
     <ColumnContainer

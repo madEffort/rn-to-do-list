@@ -1,14 +1,14 @@
 import React from 'react';
 import TodoPage from './pages/TodoPage';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { Image, Pressable, View } from 'react-native';
+import { Image, Pressable, SafeAreaView, View } from 'react-native';
 
 function App(): React.JSX.Element {
   return (
     <View style={{ flex: 1 }}>
-      <Image
+      {/* <Image
         source={{
-          uri: 'https://img.freepik.com/free-photo/white-crumpled-paper-texture-for-background_1373-159.jpg?w=1060&t=st=1667524235~exp=1667524835~hmac=8a3d988d6c33a32017e280768e1aa4037b1ec8078c98fe21f0ea2ef361aebf2c',
+          uri: 'https://img.freepik.com/free-vector/hand-drawn-blue-lined-paper-background_23-2151105441.jpg?t=st=1727853457~exp=1727857057~hmac=554dd12789464e87b187e45fcf1231490962ad42ae55366c87afb857c27895d1&w=1800',
         }}
         style={{
           width: '100%',
@@ -16,7 +16,7 @@ function App(): React.JSX.Element {
           position: 'absolute',
           zIndex: -1,
         }}
-      />
+      /> */}
       <TodoPage />
     </View>
   );
